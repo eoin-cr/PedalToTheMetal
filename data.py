@@ -32,10 +32,8 @@ def parseFile(filename):
 
     del dataPoints[-1]
 
-    for y, x in enumerate(dataPoints):
-        print(y)
-        print(x)
-        x.to_csv(f"./{filename}/{filename.split('/')[-1]}-Parsed{y}.csv", index=False)
+    for num, dataPoint in enumerate(dataPoints):
+        dataPoint.to_csv(f"./{filename}/{filename.split('/')[-1]}-Parsed{num}.csv", index=False)
 
 mode = input("file or folder? ")
 if mode == "file":
