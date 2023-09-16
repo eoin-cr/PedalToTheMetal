@@ -41,9 +41,31 @@ android:layout_height="fill_parent">
 </TableRow>
 
 <Button
-    android:id="@+id/fileButton"
+    android:id="@+id/happyButton"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:text="Save to file" />
+    android:text="Happy" />
 
+
+<Button
+    android:id="@+id/sadButton"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="Sad" />
+
+<Button
+    android:id="@+id/chillButton"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="Chill" />
+<Button
+    android:id="@+id/angryButton"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="Angry" />
+<Button
+    android:id="@+id/invalidButton"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="Invalid" />
 </TableLayout>

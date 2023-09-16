@@ -19,9 +19,7 @@ import com.example.accelerometerstorer.R;
 
 import java.io.IOException;
 import java.io.OutputStreamWriter;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 public class AccelerometerActivity extends Activity implements SensorEventListener {
     private SensorManager sensorManager;
@@ -29,9 +27,10 @@ public class AccelerometerActivity extends Activity implements SensorEventListen
     TextView xCoor; // declare X axis object
     TextView yCoor; // declare Y axis object
     TextView zCoor; // declare Z axis object
-    List<Float[]> previousAccelerations = new ArrayList<>();
+//    List<Float[]> previousAccelerations = new ArrayList<>();
     String previousAccelerationString = "";
-    TextView previousAccelerationsTextView;
+//    TextView previousAccelerationsTextView;
+    static int count = 0;
 
     @Override
     public void onCreate(Bundle savedInstanceState){
@@ -50,13 +49,50 @@ public class AccelerometerActivity extends Activity implements SensorEventListen
                 SensorManager.SENSOR_DELAY_NORMAL);
 
 
-        Button button = (Button)findViewById(R.id.fileButton);
+        Button button = (Button)findViewById(R.id.happyButton);
         button.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
                 // click handling code
-                Toast.makeText(getApplicationContext(), "File button has been clicked!", Toast.LENGTH_LONG).show();
-                writeToFile(previousAccelerationString, getApplicationContext());
+                Toast.makeText(getApplicationContext(), "Happy button has been clicked!", Toast.LENGTH_LONG).show();
+                writeToFileAndResetString(previousAccelerationString, getApplicationContext(), "happy");
+            }
+        });
+
+        button = (Button)findViewById(R.id.sadButton);
+        button.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                // click handling code
+                Toast.makeText(getApplicationContext(), "Sad button has been clicked!", Toast.LENGTH_LONG).show();
+                writeToFileAndResetString(previousAccelerationString, getApplicationContext(), "sad");
+            }
+        });
+        button = (Button)findViewById(R.id.angryButton);
+        button.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                // click handling code
+                Toast.makeText(getApplicationContext(), "Angry button has been clicked!", Toast.LENGTH_LONG).show();
+                writeToFileAndResetString(previousAccelerationString, getApplicationContext(), "angry");
+            }
+        });
+        button = (Button)findViewById(R.id.chillButton);
+        button.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                // click handling code
+                Toast.makeText(getApplicationContext(), "Chill button has been clicked!", Toast.LENGTH_LONG).show();
+                writeToFileAndResetString(previousAccelerationString, getApplicationContext(), "chill");
+            }
+        });
+        button = (Button)findViewById(R.id.invalidButton);
+        button.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                // click handling code
+                Toast.makeText(getApplicationContext(), "Invalid button has been clicked!", Toast.LENGTH_LONG).show();
+                writeToFileAndResetString(previousAccelerationString, getApplicationContext(), "invalid");
             }
         });
 
@@ -75,23 +111,25 @@ public class AccelerometerActivity extends Activity implements SensorEventListen
             float x=event.values[0];
             float y=event.values[1];
             float z=event.values[2];
-            previousAccelerations.add(new Float[]{x, y, z, Float.valueOf(System.currentTimeMillis()/1000)});
+//            previousAccelerations.add(new Float[]{x, y, z, Float.valueOf(System.currentTimeMillis())});
 
             xCoor.setText("X: "+x);
             yCoor.setText("Y: "+y);
             zCoor.setText("Z: "+z);
-            previousAccelerationString += Arrays.toString(previousAccelerations.get(previousAccelerations.size()-1));
+//            previousAccelerationString += Arrays.toString(new Float[]{x, y, z, (float) System.currentTimeMillis()});
+            previousAccelerationString += x + "," + y + "," + z + "," + (float) System.currentTimeMillis() + "\n";
 //            previousAccelerationsTextView.setText(previousAccelerationString);
 
         }
     }
 
-    private void writeToFile(String data, Context context) {
+    private void writeToFileAndResetString(String data, Context context, String emotion) {
         try {
 //            OutputStreamWriter outputStreamWriter = new OutputStreamWriter(context.openFileOutput("config.txt", Context.MODE_WORLD_READABLE));
-            OutputStreamWriter outputStreamWriter = new OutputStreamWriter(context.openFileOutput("config.txt", 0));
-            outputStreamWriter.write(data);
+            OutputStreamWriter outputStreamWriter = new OutputStreamWriter(context.openFileOutput(count++ + "-" + emotion + ".csv", 0));
+            outputStreamWriter.write(data + "\n");
             outputStreamWriter.close();
+            previousAccelerationString = "";
         }
         catch (IOException e) {
             Log.e("Exception", "File write failed: " + e.toString());
