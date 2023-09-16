@@ -20,6 +20,7 @@ import com.example.accelerometerstorer.R;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class AccelerometerActivity extends Activity implements SensorEventListener {
@@ -55,6 +56,7 @@ public class AccelerometerActivity extends Activity implements SensorEventListen
             public void onClick(View view) {
                 // click handling code
                 Toast.makeText(getApplicationContext(), "File button has been clicked!", Toast.LENGTH_LONG).show();
+                writeToFile(previousAccelerationString, getApplicationContext());
             }
         });
 
@@ -73,12 +75,12 @@ public class AccelerometerActivity extends Activity implements SensorEventListen
             float x=event.values[0];
             float y=event.values[1];
             float z=event.values[2];
-//            previousAccelerations.add(new Float[]{x, y, z});
+            previousAccelerations.add(new Float[]{x, y, z, Float.valueOf(System.currentTimeMillis()/1000)});
 
             xCoor.setText("X: "+x);
             yCoor.setText("Y: "+y);
             zCoor.setText("Z: "+z);
-//            previousAccelerationString += previousAccelerations.get(previousAccelerations.size()-1);
+            previousAccelerationString += Arrays.toString(previousAccelerations.get(previousAccelerations.size()-1));
 //            previousAccelerationsTextView.setText(previousAccelerationString);
 
         }
@@ -86,7 +88,8 @@ public class AccelerometerActivity extends Activity implements SensorEventListen
 
     private void writeToFile(String data, Context context) {
         try {
-            OutputStreamWriter outputStreamWriter = new OutputStreamWriter(context.openFileOutput("config.txt", Context.MODE_PRIVATE));
+//            OutputStreamWriter outputStreamWriter = new OutputStreamWriter(context.openFileOutput("config.txt", Context.MODE_WORLD_READABLE));
+            OutputStreamWriter outputStreamWriter = new OutputStreamWriter(context.openFileOutput("config.txt", 0));
             outputStreamWriter.write(data);
             outputStreamWriter.close();
         }
