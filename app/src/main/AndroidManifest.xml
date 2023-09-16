@@ -7,7 +7,7 @@
 <!--    <application android:icon="@drawable/icon" android:label="@string/app_name" android:debuggable="true">-->
     <application android:label="@string/app_name">
 
-    <activity android:name="com.example.pedaltothemetal.AccelerometerActivity"
+    <activity android:name="com.example.pedaltothemetal.MainActivity"
             android:label="@string/app_name"
             android:exported="true">
             <intent-filter>
