@@ -7,7 +7,7 @@ android:layout_height="fill_parent">
 <TableRow>
     <TextView
         android:id="@+id/xcoor"
-        android:text="X Coordinate: "
+        android:text="X 1Coordinate: "
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         />
@@ -30,5 +30,20 @@ android:layout_height="fill_parent">
         android:layout_height="wrap_content"
         />
 </TableRow>
+
+<TableRow>
+    <TextView
+        android:id="@+id/previousAccelerationsTextView"
+        android:text="Prev Accel: "
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        />
+</TableRow>
+
+<Button
+    android:id="@+id/supabutton"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="I'm a button" />
 
 </TableLayout>
