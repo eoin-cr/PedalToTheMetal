@@ -1,4 +1,4 @@
-package com.example.accelerometerstorer;
+package com.example.pedaltothemetal;
 
 import android.app.Activity;
 import android.content.Context;
@@ -8,7 +8,14 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.TextView;
+import android.widget.Button;
+import android.widget.Toast;
+
+//import androidx.compose.material3.Button;
+
+import com.example.accelerometerstorer.R;
 
 import java.io.IOException;
 import java.io.OutputStreamWriter;
@@ -41,6 +48,15 @@ public class AccelerometerActivity extends Activity implements SensorEventListen
                 sensorManager.getDefaultSensor(Sensor.TYPE_LINEAR_ACCELERATION),
                 SensorManager.SENSOR_DELAY_NORMAL);
 
+
+        Button button = (Button)findViewById(R.id.fileButton);
+        button.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                // click handling code
+                Toast.makeText(getApplicationContext(), "File button has been clicked!", Toast.LENGTH_LONG).show();
+            }
+        });
 
     }
 
@@ -78,4 +94,5 @@ public class AccelerometerActivity extends Activity implements SensorEventListen
             Log.e("Exception", "File write failed: " + e.toString());
         }
     }
+
 }
