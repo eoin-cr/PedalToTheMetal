@@ -95,6 +95,15 @@ public class AccelerometerActivity extends Activity implements SensorEventListen
                 writeToFileAndResetString(previousAccelerationString, getApplicationContext(), "invalid");
             }
         });
+        button = (Button)findViewById(R.id.clearButton);
+        button.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                // click handling code
+                Toast.makeText(getApplicationContext(), "Clear button has been clicked!", Toast.LENGTH_LONG).show();
+                previousAccelerationString = "";
+            }
+        });
 
     }
 
@@ -111,14 +120,11 @@ public class AccelerometerActivity extends Activity implements SensorEventListen
             float x=event.values[0];
             float y=event.values[1];
             float z=event.values[2];
-//            previousAccelerations.add(new Float[]{x, y, z, Float.valueOf(System.currentTimeMillis())});
 
             xCoor.setText("X: "+x);
             yCoor.setText("Y: "+y);
             zCoor.setText("Z: "+z);
-//            previousAccelerationString += Arrays.toString(new Float[]{x, y, z, (float) System.currentTimeMillis()});
-            previousAccelerationString += x + "," + y + "," + z + "," + (float) System.currentTimeMillis() + "\n";
-//            previousAccelerationsTextView.setText(previousAccelerationString);
+            previousAccelerationString += x + "," + y + "," + z + "," + System.currentTimeMillis() + "\n";
 
         }
     }
