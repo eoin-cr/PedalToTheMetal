@@ -46,7 +46,7 @@ public class AccelerometerActivity extends Activity implements SensorEventListen
         // add listener. The listener will be  (this) class
         sensorManager.registerListener(this,
                 sensorManager.getDefaultSensor(Sensor.TYPE_LINEAR_ACCELERATION),
-                SensorManager.SENSOR_DELAY_NORMAL);
+                50000);
 
 
         Button button = (Button)findViewById(R.id.happyButton);
