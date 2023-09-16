@@ -27,6 +27,7 @@ def parseFile(filename):
             break
         firstTimeDataPoint = dataPoint["time"].values[0]
         dataPoint["timeOffset"] = dataPoint["time"] - firstTimeDataPoint
+        del dataPoint["time"]
         dataPoints.append(dataPoint)
         n += 1
 
