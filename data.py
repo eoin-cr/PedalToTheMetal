@@ -35,7 +35,7 @@ def parseFile(filename):
     for y, x in enumerate(dataPoints):
         print(y)
         print(x)
-        x.to_csv(f"./{filename}/{filename}-Parsed{y}.csv", index=False)
+        x.to_csv(f"./{filename}/{filename.split('/')[-1]}-Parsed{y}.csv", index=False)
 
 mode = input("file or folder? ")
 if mode == "file":
