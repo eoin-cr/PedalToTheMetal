@@ -133,7 +133,8 @@ public class AccelerometerActivity extends Activity implements SensorEventListen
         try {
 //            OutputStreamWriter outputStreamWriter = new OutputStreamWriter(context.openFileOutput("config.txt", Context.MODE_WORLD_READABLE));
             OutputStreamWriter outputStreamWriter = new OutputStreamWriter(context.openFileOutput(count++ + "-" + emotion + ".csv", 0));
-            outputStreamWriter.write(data + "\n");
+            String header = "x_acc,y_acc,z_acc,time";
+            outputStreamWriter.write(header + "\n" + data + "\n");
             outputStreamWriter.close();
             previousAccelerationString = "";
         }
