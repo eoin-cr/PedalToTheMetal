@@ -63,4 +63,6 @@ dependencies {
     androidTestImplementation("androidx.compose.ui:ui-test-junit4")
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
+//    implementation("org.apache.httpcomponents:httpclient:4.5.13")
+    implementation("com.squareup.okhttp3:okhttp:4.9.1")
 }
