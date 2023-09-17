@@ -46,5 +46,19 @@ for directory, subdirectories, files in os.walk(model.path):
 
             embeddings = encoder(tensor_acceleration)
             print(f'{os.path.join(directory, file)}: {embeddings}')
-            prob = nn.functional.softmax(output_en, dim=1)
+            # prob = nn.functional.softmax(output_en, dim=1)
 
+
+            ###################
+
+            #flatten embeddings
+            embeddings_flat = embeddings.flatten()
+
+            # Get the index of the maximum value
+            test, predicted_index = torch.max(embeddings_flat, 0)
+
+            # Convert the index to an integer
+            digit = int(predicted_index.item())
+
+            #return the result
+            print(digit)
