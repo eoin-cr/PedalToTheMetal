@@ -1,37 +1,65 @@
 <?xml version="1.0" encoding="utf-8"?>
 <TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent">
+    android:layout_height="fill_parent"
+    android:orientation="vertical"
+    android:stretchColumns="1">
 
     <TableRow
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <ImageView
-            android:id="@+id/imageView2"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:src="@drawable/logo_htn" />
+        android:layout_width="fill_parent"
+        android:layout_height="match_parent"
+        android:gravity="center_horizontal">
 
         <ImageView
             android:id="@+id/imageView3"
-            android:layout_width="50dp"
             android:layout_height="50dp"
-            android:src="@drawable/logo_1" />
+            android:layout_width="50dp"
+            android:src="@drawable/logo_2"
+            android:layout_gravity="center_horizontal" />
     </TableRow>
 
     <TableRow
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_width="fill_parent"
+        android:layout_height="match_parent"
+        android:gravity="center_horizontal" >
 
         <TextView
-            android:id="@+id/mood_is"
+            android:id="@+id/emotion_is"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="@string/mood_is"
-            android:textColor="#fff"
-            android:textSize="30sp" />
+            android:text="@string/emotion_is"
+            android:textColor="#000"
+            android:textSize="32sp" />
+    </TableRow>
+
+    <TableRow
+        android:layout_width="fill_parent"
+        android:layout_height="match_parent"
+        android:gravity="center_horizontal" >
+
+        <TextView
+            android:id="@+id/emotion"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:text="@null"
+            android:textColor="#000"
+            android:textSize="48sp" />
+    </TableRow>
+
+    <TableRow
+        android:layout_width="fill_parent"
+        android:layout_height="match_parent"
+        android:gravity="center_horizontal" >
+
+        <ImageView
+            android:id="@+id/htn_logo_view"
+            android:layout_height="50dp"
+            android:layout_width="50dp"
+            android:src="@drawable/logo_htn"
+            android:gravity="center_horizontal"
+            android:contentDescription="@string/htn_logo_name" />
     </TableRow>
 
 

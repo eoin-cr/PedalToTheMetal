@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">PedalToTheMetal</string>
-    <string name="mood_is">Your current mood is</string>
+    <string name="emotion_is">Your current emotion is</string>
+    <string name="htn_logo_name">Hack the North logo</string>
 </resources>
