@@ -49,6 +49,7 @@ public class PedalToTheMetal extends Activity implements SensorEventListener {
     String header = "x_acc,y_acc,z_acc,time";
     Map<Integer, String> dictionary = new HashMap<>();
     OkHttpClient client = new OkHttpClient();
+    int emotionNumber;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -80,7 +81,7 @@ public class PedalToTheMetal extends Activity implements SensorEventListener {
         Runnable queryRunnable = () -> queryEmotion();
 
         ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
-        executor.scheduleAtFixedRate(queryRunnable, 3, 3, TimeUnit.SECONDS);
+        executor.scheduleAtFixedRate(queryRunnable, 5, 10, TimeUnit.SECONDS);
     }
 
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
@@ -162,7 +163,7 @@ public class PedalToTheMetal extends Activity implements SensorEventListener {
                     .add("csv_as_str", header + "\n" + previousAccelerationString + "\n")
                     .build();
             Request request = new Request.Builder()
-                    .url("http://10.33.134.164:5000/post")
+                    .url("http://10.33.135.208:5000/post")
                     .post(formBody)
                     .build();
             previousAccelerationString = "";
@@ -172,8 +173,12 @@ public class PedalToTheMetal extends Activity implements SensorEventListener {
 
             String[] lines = response.body().string().split("\n");
                 int emoNum = Integer.valueOf(lines[0]);
-                emotion.setText(dictionary.get(emoNum));
-                playlist.setText(String.join("\n", Arrays.copyOfRange(lines, 1, 6)));
+                if (emoNum != emotionNumber) {
+                    emotion.setText(dictionary.get(emoNum));
+                    playlist.setText(String.join("\n", Arrays.copyOfRange(lines, 1, 6)));
+                    emotionNumber = emoNum;
+                }
+
                 response.close();
 
         } catch (Exception e) {
