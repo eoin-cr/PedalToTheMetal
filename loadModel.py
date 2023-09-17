@@ -9,7 +9,7 @@ loaded_model = torch.load('trained_model.pth')
 
 loaded_model.eval()
 
-test_path = "TrainingData/HighPolling/Test/"
+test_path = "TrainingData/HighPolling/Test2/"
 emotionsMap = {"happy": 0, "sad": 1, "chill": 2, "angry": 3, "invalid": 4}
 
 
@@ -18,11 +18,13 @@ filesList = []
 
 for directory, subdirectories, files in os.walk(test_path):
     for file in files:
-        # if "Parsed" in file:
+        print(file)
         if "Parsed" in file:
             os_path = os.path.join(directory, file)
             filesList.append(os_path)
             input_data = np.genfromtxt(os_path, dtype=float, delimiter=',', names=True)
+            print("hi")
+            print(f'data: {input_data}')
             target_array_shape = (45, 3)
             pad_x = (target_array_shape[0] - input_data.shape[0])
 
@@ -41,7 +43,6 @@ for directory, subdirectories, files in os.walk(test_path):
 print(test_data_array.shape)
 test_data_array = np.array(test_data_array, dtype="float32")
 print(type(test_data_array[0][0]))
-# input_data_tensor = torch.LongTensor
 test_data_array = torch.Tensor(test_data_array)
 
 i = 0

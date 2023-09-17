@@ -2,34 +2,19 @@ import numpy
 import numpy as np
 import os
 
-# import sklearn
-import torch
-# import torch.nn as nn
-import torch.optim as optim
-from pytorch_lightning import LightningModule
-from torch.utils.data import Dataset, DataLoader
-# import dask.dataframe as dd
-import pandas as pd
-from torch import optim, nn, utils, Tensor
-from torchvision.datasets import MNIST
-from torchvision.transforms import ToTensor
-import lightning.pytorch as pl
-from sklearn import preprocessing
 from sklearn.metrics import accuracy_score
+import torch
+import torch.nn as nn
+import torch.optim as optim
 
 emotionsMap = {"happy": 0, "sad": 1, "chill": 2, "angry": 3, "invalid": 4}
-# emotions = ["happy", "sad", "angry", "chill", "invalid"]
 
 path = "TrainingData/HighPolling/"
 
 train_acceleration = []
 train_emotion = []
 
-# dataset = []
-#
-# for directory, subdirectories, files in os.walk(path):
 input_data_array = None
-
 label_data_array = None
 
 for directory, subdirectories, files in os.walk(path):
@@ -59,21 +44,13 @@ for directory, subdirectories, files in os.walk(path):
 
                     break
 
-
-# print(input_data_array)
 print(input_data_array.shape)
 input_data_array = np.array(input_data_array, dtype="float32")
 print(type(input_data_array[0][0]))
-# input_data_tensor = torch.LongTensor
 one_hot_vectors = torch.nn.functional.one_hot(torch.tensor(label_data_array).squeeze(), num_classes=5)
 label_data_array = np.array(one_hot_vectors, dtype="float32")
 print(type(label_data_array[0].shape))
 print(type(label_data_array[0][0]))
-
-
-import torch
-import torch.nn as nn
-import torch.optim as optim
 
 
 class SimpleNN(nn.Module):
@@ -98,6 +75,7 @@ class SimpleNN(nn.Module):
 
         return x
 
+
 input_size = 135
 hidden_size = 8
 output_size = 5
@@ -107,23 +85,16 @@ model = SimpleNN(input_size, hidden_size, output_size)
 criterion = nn.CrossEntropyLoss()
 optimizer = optim.Adam(model.parameters(), lr=0.001)
 
-# Assuming your input data is stored in a variable named 'input_data'
-# and your labels are stored in a variable named 'labels'
-
 input_data = torch.Tensor(input_data_array)
-labels = torch.Tensor(label_data_array)  # Convert labels to long type
+labels = torch.Tensor(label_data_array)
 
-# Set the number of training epochs
 num_epochs = 7000
 
 for epoch in range(num_epochs):
     # Forward pass
     outputs = model(input_data)
     _, predicted = torch.max(outputs, 1)
-    # accuracy = accuracy_score(labels, predicted.numpy())
 
-    # Compute the loss
-    # print(type)
     loss = criterion(outputs, labels)
 
     # Backpropagation and optimization
@@ -131,17 +102,6 @@ for epoch in range(num_epochs):
     loss.backward()
     optimizer.step()
 
-    # # Compute and print the training accuracy at each epoch
-    # with torch.no_grad():
-    #     model.eval()
-    #     train_outputs = model(input_data)
-    #     _, train_predicted = torch.max(train_outputs, 1)
-    #     train_accuracy = accuracy_score(labels.numpy(), train_predicted.numpy())
-    #     print(f'Epoch [{epoch + 1}/{num_epochs}], Training Accuracy: {train_accuracy * 100:.2f}%')
-
-
-    # # Print the loss at each epoch (optional)
-    # if (epoch + 1) % 100 == 0:
     print(f'Epoch [{epoch + 1}/{num_epochs}], Loss: {loss.item()}')
 
 test_path = "TrainingData/HighPolling/Test/"
@@ -151,7 +111,6 @@ test_labels = None
 
 for directory, subdirectories, files in os.walk(test_path):
     for file in files:
-        # if "Parsed" in file:
         if "Parsed" in file:
             input_data = numpy.genfromtxt(os.path.join(directory, file), dtype=float, delimiter=',', names=True)
             target_array_shape = (45, 3)
@@ -178,15 +137,10 @@ torch.save(model, 'trained_model.pth')
 print(test_data_array.shape)
 test_data_array = np.array(test_data_array, dtype="float32")
 print(type(test_data_array[0][0]))
-# input_data_tensor = torch.LongTensor
 test_data_array = torch.Tensor(test_data_array)
 test_labels = torch.Tensor(test_labels)
-
 
 with torch.no_grad():
     model.eval()
     test_outputs = model(test_data_array)
     _, predicted = torch.max(test_outputs, 1)
-    accuracy = accuracy_score(test_labels, predicted.numpy())
-    # loss = criterion(test_outputs, test_labels)
-    print(f'Test Accuracy: {accuracy * 100:.2f}%')
