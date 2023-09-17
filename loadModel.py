@@ -1,66 +1,61 @@
 import os
 
 import torch
-import matplotlib.pyplot as plt
-import model
 import numpy as np
-from torch import nn
-#
-# # define any number of nn.Modules (or use your current ones)
-# encoder = nn.Sequential(nn.Linear(45 * 5, 64), nn.ReLU(), nn.Linear(64, 3))
-# decoder = nn.Sequential(nn.Linear(3, 64), nn.ReLU(), nn.Linear(64, 5 * 45))
 
-device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+from model import SimpleNN
 
-# load checkpoint
-checkpoint = "./lightning_logs/version_38/checkpoints/epoch=49-step=5000.ckpt"
-autoencoder = model.LitAutoEncoder.load_from_checkpoint(checkpoint, encoder=model.encoder, decoder=model.decoder)
-# autoencoder = model.LitAutoEncoder.load_from_checkpoint(checkpoint, encoder=encoder, decoder=decoder)
-autoencoder = autoencoder.to(device)
+loaded_model = torch.load('trained_model.pth')
 
-# choose your trained nn.Module
-encoder = autoencoder.encoder
-encoder.eval()
-
-# test_acceleration = []
+loaded_model.eval()
 
 test_path = "TrainingData/HighPolling/Test/"
-# for directory, subdirectories, files in os.walk(test_path):
-for directory, subdirectories, files in os.walk(model.path):
+emotionsMap = {"happy": 0, "sad": 1, "chill": 2, "angry": 3, "invalid": 4}
+
+
+test_data_array = None
+filesList = []
+
+for directory, subdirectories, files in os.walk(test_path):
     for file in files:
         # if "Parsed" in file:
-        if "Parsed" in file and directory != "Test":
-            data = np.genfromtxt(os.path.join(directory, file), dtype=float, delimiter=',', names=True)
-            target_array_shape = (45, 4)
-            pad_x = (target_array_shape[0]-data.shape[0])
+        if "Parsed" in file:
+            os_path = os.path.join(directory, file)
+            filesList.append(os_path)
+            input_data = np.genfromtxt(os_path, dtype=float, delimiter=',', names=True)
+            target_array_shape = (45, 3)
+            pad_x = (target_array_shape[0] - input_data.shape[0])
 
-            flat = []
-            data = [list(item) for item in data]
+            input_data = [list(item) for item in input_data]
+            input_data = np.delete(input_data, 3, 1)
+            input_data = np.pad(input_data, ((pad_x, 0), (0, 0)), mode="constant")
 
-            # print(data)
-            # if len(data[0]) == 5:
-                # print(data)
-            data = np.pad(data, ((pad_x, 0), (0, 0)), mode="constant")
+            input_data = input_data.flatten()
 
-            for element in data:
-                for nested in element:
-                    flat.append(nested)
+            if test_data_array is None:
+                test_data_array = input_data
+            else:
+                test_data_array = np.vstack((test_data_array, input_data))
 
-            test_acceleration = np.array(flat)
-            tensor_acceleration = torch.Tensor(test_acceleration).to(device)
 
-            # embeddings = encoder(tensor_acceleration)
-            with torch.no_grad():
-                embeddings = autoencoder.encoder(tensor_acceleration.unsqueeze(0))
+print(test_data_array.shape)
+test_data_array = np.array(test_data_array, dtype="float32")
+print(type(test_data_array[0][0]))
+# input_data_tensor = torch.LongTensor
+test_data_array = torch.Tensor(test_data_array)
 
-            print(f'{os.path.join(directory, file)}: {embeddings}')
-            # prob = nn.functional.softmax(output_en, dim=1)
+i = 0
 
-            embeddings = embeddings.view(embeddings.size(0), -1)
+correct = []
 
-            predicted_probs = torch.softmax(embeddings, dim=1)
-            _, predicted_label = torch.max(predicted_probs, dim=1)
+for file in filesList:
+    for key in emotionsMap.keys():
+        if key in file:
+            correct.append(emotionsMap[key])
+            break
 
-            predicted_label = predicted_label.squeeze().tolist()
-
-            print(f'Predicted: {predicted_label}')
+with torch.no_grad():
+    predicted_outputs = loaded_model(test_data_array)
+    _, predicted_labels = torch.max(predicted_outputs, 1)
+    print(predicted_labels)
+    print(correct)
