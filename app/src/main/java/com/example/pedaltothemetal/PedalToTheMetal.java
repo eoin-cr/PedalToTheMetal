@@ -26,6 +26,7 @@ import java.net.URL;
 
 import com.example.accelerometerstorer.R;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.Executors;
@@ -38,9 +39,11 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
+import okhttp3.ResponseBody;
 
 public class PedalToTheMetal extends Activity implements SensorEventListener {
     TextView emotion; // declare mood object
+    TextView playlist;
     private SensorManager sensorManager;
     String previousAccelerationString = "";
     String header = "x_acc,y_acc,z_acc,time";
@@ -64,6 +67,7 @@ public class PedalToTheMetal extends Activity implements SensorEventListener {
         dictionary.put(4, "Invalid");
 
         emotion = (TextView) findViewById(R.id.emotion); // create mood object
+        playlist = (TextView) findViewById(R.id.Playlist);
 
         emotion.setText("Currently loading");
 
@@ -155,7 +159,7 @@ public class PedalToTheMetal extends Activity implements SensorEventListener {
 
         try {
             RequestBody formBody = new FormBody.Builder()
-                    .add("csv_as_str", "{\"csv_as_str\": \"" + header + "\n" + previousAccelerationString + "\n\"}\n\n")
+                    .add("csv_as_str", header + "\n" + previousAccelerationString + "\n")
                     .build();
             Request request = new Request.Builder()
                     .url("http://10.33.134.164:5000/post")
@@ -166,9 +170,11 @@ public class PedalToTheMetal extends Activity implements SensorEventListener {
             Call call = client.newCall(request);
             Response response = call.execute();
 
-            String[] lines = response.body().toString().split("\n");
+            String[] lines = response.body().string().split("\n");
                 int emoNum = Integer.valueOf(lines[0]);
                 emotion.setText(dictionary.get(emoNum));
+                playlist.setText(String.join("\n", Arrays.copyOfRange(lines, 1, 6)));
+                response.close();
 
         } catch (Exception e) {
 

@@ -10,7 +10,7 @@ app = Flask(__name__)
 @app.route('/post', methods=['POST'])
 def result():
     try:
-        print(request.args, request.headers)
+        print(request.form, request.headers)
         csvStr = request.form['csv_as_str']
         with open("./receivedData.csv", "tw", encoding="utf8", newline="") as F:
             F.write(csvStr)
@@ -20,9 +20,9 @@ def result():
         # Trigger the AI model then return the result from spotify
         result = 2
         for f in os.listdir("./receivedData/"):
-            os.remove(f)
+            os.remove(os.path.join("./receivedData/", f))
         os.rmdir("./receivedData/")
-        return str(result)
+        return str(result) + "\n" + "\n".join([item for item in spotifyHandler.playlistGeneration(spotifyHandler.getGenres(result), 5)])
     except Exception as e:
         print(e)
         return ""
