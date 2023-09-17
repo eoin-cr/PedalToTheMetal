@@ -1,64 +1,61 @@
 import os
 
 import torch
-import model
 import numpy as np
-from torch import nn
-#
-# # define any number of nn.Modules (or use your current ones)
-# encoder = nn.Sequential(nn.Linear(45 * 5, 64), nn.ReLU(), nn.Linear(64, 3))
-# decoder = nn.Sequential(nn.Linear(3, 64), nn.ReLU(), nn.Linear(64, 5 * 45))
 
-# load checkpoint
-checkpoint = "./lightning_logs/version_18/checkpoints/epoch=19-step=2000.ckpt"
-autoencoder = model.LitAutoEncoder.load_from_checkpoint(checkpoint, encoder=model.encoder, decoder=model.decoder)
-# autoencoder = model.LitAutoEncoder.load_from_checkpoint(checkpoint, encoder=encoder, decoder=decoder)
-autoencoder = autoencoder.to('cpu')
+from model import SimpleNN
 
-# choose your trained nn.Module
-encoder = autoencoder.encoder
-encoder.eval()
+loaded_model = torch.load('trained_model.pth')
 
-# test_acceleration = []
+loaded_model.eval()
 
-test_path = "TrainingData/HighPolling/Test"
-for directory, subdirectories, files in os.walk(model.path):
+test_path = "TrainingData/HighPolling/Test/"
+emotionsMap = {"happy": 0, "sad": 1, "chill": 2, "angry": 3, "invalid": 4}
+
+
+test_data_array = None
+filesList = []
+
+for directory, subdirectories, files in os.walk(test_path):
     for file in files:
+        # if "Parsed" in file:
         if "Parsed" in file:
-            data = np.genfromtxt(os.path.join(directory, file), dtype=float, delimiter=',', names=True)
-            target_array_shape = (45, 4)
-            pad_x = (target_array_shape[0]-data.shape[0])
+            os_path = os.path.join(directory, file)
+            filesList.append(os_path)
+            input_data = np.genfromtxt(os_path, dtype=float, delimiter=',', names=True)
+            target_array_shape = (45, 3)
+            pad_x = (target_array_shape[0] - input_data.shape[0])
 
-            flat = []
-            data = [list(item) for item in data]
+            input_data = [list(item) for item in input_data]
+            input_data = np.delete(input_data, 3, 1)
+            input_data = np.pad(input_data, ((pad_x, 0), (0, 0)), mode="constant")
 
-            # print(data)
-            # if len(data[0]) == 5:
-                # print(data)
-            data = np.pad(data, ((pad_x, 0), (0, 0)), mode="constant")
+            input_data = input_data.flatten()
 
-            for element in data:
-                for nested in element:
-                    flat.append(nested)
-
-            test_acceleration = np.array(flat)
-            tensor_acceleration = torch.Tensor(test_acceleration).to('cpu')
-
-            embeddings = encoder(tensor_acceleration)
-            print(f'{os.path.join(directory, file)}: {embeddings}')
-            # prob = nn.functional.softmax(output_en, dim=1)
+            if test_data_array is None:
+                test_data_array = input_data
+            else:
+                test_data_array = np.vstack((test_data_array, input_data))
 
 
-            ###################
+print(test_data_array.shape)
+test_data_array = np.array(test_data_array, dtype="float32")
+print(type(test_data_array[0][0]))
+# input_data_tensor = torch.LongTensor
+test_data_array = torch.Tensor(test_data_array)
 
-            #flatten embeddings
-            embeddings_flat = embeddings.flatten()
+i = 0
 
-            # Get the index of the maximum value
-            test, predicted_index = torch.max(embeddings_flat, 0)
+correct = []
 
-            # Convert the index to an integer
-            digit = int(predicted_index.item())
+for file in filesList:
+    for key in emotionsMap.keys():
+        if key in file:
+            correct.append(emotionsMap[key])
+            break
 
-            #return the result
-            print(digit)
+with torch.no_grad():
+    predicted_outputs = loaded_model(test_data_array)
+    _, predicted_labels = torch.max(predicted_outputs, 1)
+    print(predicted_labels)
+    print(correct)
