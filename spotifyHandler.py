@@ -2,6 +2,16 @@ import spotipy
 from spotipy.oauth2 import SpotifyClientCredentials
 import json
 
+def getGenres(emoNum):
+    genres = {
+        0: [],
+        1: [],
+        2: [],
+        3: [],
+        4: []
+    }
+    return genres[emoNum]
+
 def playlistGeneration(genres, amountSongs):  # Ex.) genres = ["hip-hop", "rainy-day"]
     with open("./env.json", "tr", encoding="utf-8") as F:
         env = json.load(F)
