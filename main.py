@@ -12,3 +12,4 @@ def playlistGeneration(genres): # Ex.) genres = ["hip-hop", "rainy-day"]
 	
 	for item in res:
 		print(item['name'], "-", item['artists'][0]['name'])
+
