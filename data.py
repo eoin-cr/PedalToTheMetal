@@ -36,11 +36,12 @@ def parseFile(filename):
     for num, dataPoint in enumerate(dataPoints):
         dataPoint.to_csv(f"./{filename}/{filename.split('/')[-1]}-Parsed{num}.csv", index=False)
 
-mode = input("file or folder? ")
-if mode == "file":
-    parseFile(input("Filename/path: "))
-elif mode  == "folder":
-    dirname = input("Folder name/path: ")
-    for filename in os.listdir(dirname):
-        fn = os.path.join(dirname, filename)
-        parseFile(fn)
+if __name__ == "__main__":
+    mode = input("file or folder? ")
+    if mode == "file":
+        parseFile(input("Filename/path: "))
+    elif mode  == "folder":
+        dirname = input("Folder name/path: ")
+        for filename in os.listdir(dirname):
+            fn = os.path.join(dirname, filename)
+            parseFile(fn)
