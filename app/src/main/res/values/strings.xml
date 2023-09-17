@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">PedalToTheMetal</string>
+    <string name="mood_is">Your current mood is</string>
 </resources>
