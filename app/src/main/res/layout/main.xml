@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="vertical"
@@ -12,10 +13,28 @@
 
         <ImageView
             android:id="@+id/imageView3"
-            android:layout_height="50dp"
             android:layout_width="50dp"
-            android:src="@drawable/logo_2"
-            android:layout_gravity="center_horizontal" />
+            android:layout_height="100dp"
+            android:layout_gravity="center_horizontal"
+            android:scaleX="0.8"
+            android:scaleY="0.8"
+            android:src="@drawable/logo_2" />
+    </TableRow>
+
+    <TableRow
+        android:layout_width="fill_parent"
+        android:layout_height="match_parent"
+        android:gravity="center_horizontal" >
+
+        <TextView
+            android:id="@+id/Dashboard"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:gravity="left"
+            android:text="Dashboard"
+            android:textColor="#000"
+            android:textSize="40sp"
+            android:textStyle="bold" />
     </TableRow>
 
     <TableRow
@@ -41,7 +60,7 @@
         <TextView
             android:id="@+id/emotion"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="80dp"
             android:gravity="center_horizontal"
             android:text="@null"
             android:textColor="#000"
@@ -53,13 +72,29 @@
         android:layout_height="match_parent"
         android:gravity="center_horizontal" >
 
+        <TextView
+            android:id="@+id/Curated_Playlist"
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:gravity="left"
+            android:text="Curated Playlist"
+            android:textColor="#000"
+            android:textSize="32sp"
+            android:textStyle="bold" />
+    </TableRow>
+
+    <TableRow
+        android:layout_width="fill_parent"
+        android:layout_height="match_parent"
+        android:gravity="center_horizontal" >
+
         <ImageView
             android:id="@+id/htn_logo_view"
-            android:layout_height="50dp"
             android:layout_width="50dp"
-            android:src="@drawable/logo_htn"
+            android:layout_height="80dp"
+            android:contentDescription="@string/htn_logo_name"
             android:gravity="center_horizontal"
-            android:contentDescription="@string/htn_logo_name" />
+            android:src="@drawable/logo_htn" />
     </TableRow>
 
 
