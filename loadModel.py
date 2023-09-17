@@ -1,6 +1,7 @@
 import os
 
 import torch
+import matplotlib.pyplot as plt
 import model
 import numpy as np
 from torch import nn
@@ -9,11 +10,13 @@ from torch import nn
 # encoder = nn.Sequential(nn.Linear(45 * 5, 64), nn.ReLU(), nn.Linear(64, 3))
 # decoder = nn.Sequential(nn.Linear(3, 64), nn.ReLU(), nn.Linear(64, 5 * 45))
 
+device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+
 # load checkpoint
-checkpoint = "./lightning_logs/version_18/checkpoints/epoch=19-step=2000.ckpt"
+checkpoint = "./lightning_logs/version_38/checkpoints/epoch=49-step=5000.ckpt"
 autoencoder = model.LitAutoEncoder.load_from_checkpoint(checkpoint, encoder=model.encoder, decoder=model.decoder)
 # autoencoder = model.LitAutoEncoder.load_from_checkpoint(checkpoint, encoder=encoder, decoder=decoder)
-autoencoder = autoencoder.to('cpu')
+autoencoder = autoencoder.to(device)
 
 # choose your trained nn.Module
 encoder = autoencoder.encoder
@@ -21,10 +24,12 @@ encoder.eval()
 
 # test_acceleration = []
 
-test_path = "TrainingData/HighPolling/Test"
+test_path = "TrainingData/HighPolling/Test/"
+# for directory, subdirectories, files in os.walk(test_path):
 for directory, subdirectories, files in os.walk(model.path):
     for file in files:
-        if "Parsed" in file:
+        # if "Parsed" in file:
+        if "Parsed" in file and directory != "Test":
             data = np.genfromtxt(os.path.join(directory, file), dtype=float, delimiter=',', names=True)
             target_array_shape = (45, 4)
             pad_x = (target_array_shape[0]-data.shape[0])
@@ -42,23 +47,20 @@ for directory, subdirectories, files in os.walk(model.path):
                     flat.append(nested)
 
             test_acceleration = np.array(flat)
-            tensor_acceleration = torch.Tensor(test_acceleration).to('cpu')
+            tensor_acceleration = torch.Tensor(test_acceleration).to(device)
 
-            embeddings = encoder(tensor_acceleration)
+            # embeddings = encoder(tensor_acceleration)
+            with torch.no_grad():
+                embeddings = autoencoder.encoder(tensor_acceleration.unsqueeze(0))
+
             print(f'{os.path.join(directory, file)}: {embeddings}')
             # prob = nn.functional.softmax(output_en, dim=1)
 
+            embeddings = embeddings.view(embeddings.size(0), -1)
 
-            ###################
+            predicted_probs = torch.softmax(embeddings, dim=1)
+            _, predicted_label = torch.max(predicted_probs, dim=1)
 
-            #flatten embeddings
-            embeddings_flat = embeddings.flatten()
+            predicted_label = predicted_label.squeeze().tolist()
 
-            # Get the index of the maximum value
-            test, predicted_index = torch.max(embeddings_flat, 0)
-
-            # Convert the index to an integer
-            digit = int(predicted_index.item())
-
-            #return the result
-            print(digit)
+            print(f'Predicted: {predicted_label}')
