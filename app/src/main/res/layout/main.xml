@@ -1,76 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
-<TableLayout
-xmlns:android="http://schemas.android.com/apk/res/android"
-android:layout_width="fill_parent"
-android:layout_height="fill_parent">
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
 
-<TableRow>
-    <TextView
-        android:id="@+id/xcoor"
-        android:text="X 1Coordinate: "
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        />
-</TableRow>
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-<TableRow>
-    <TextView
-        android:id="@+id/ycoor"
-        android:text="Y Coordinate: "
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        />
-</TableRow>
+        <ImageView
+            android:id="@+id/imageView2"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:src="@drawable/logo_htn" />
 
-<TableRow>
-    <TextView
-        android:id="@+id/zcoor"
-        android:text="Z Coordinate: "
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        />
-</TableRow>
+        <ImageView
+            android:id="@+id/imageView3"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:src="@drawable/logo_1" />
+    </TableRow>
 
-<TableRow>
-    <TextView
-        android:id="@+id/previousAccelerationsTextView"
-        android:text="Prev Accel: "
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        />
-</TableRow>
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-<Button
-    android:id="@+id/happyButton"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:text="Happy" />
+        <TextView
+            android:id="@+id/mood_is"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/mood_is"
+            android:textColor="#fff"
+            android:textSize="30sp" />
+    </TableRow>
 
 
-<Button
-    android:id="@+id/sadButton"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:text="Sad" />
-
-<Button
-    android:id="@+id/chillButton"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:text="Chill" />
-<Button
-    android:id="@+id/angryButton"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:text="Angry" />
-<Button
-    android:id="@+id/invalidButton"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:text="Invalid" />
-    <Button
-        android:id="@+id/clearButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Clear" />
 </TableLayout>
