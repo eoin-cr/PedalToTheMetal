@@ -4,10 +4,10 @@ import json
 
 def getGenres(emoNum):
     genres = {
-        0: [],
-        1: [],
-        2: [],
-        3: [],
+        0: ['acoustic', 'disco', 'funk', 'pop', 'reggae'],
+        1: ['blues', 'singer-songwriter', 'emo', 'acoustic', 'indie-pop'],
+        2: ['ambient', 'chill', 'bossanova', 'jazz', 'acoustic'],
+        3: ['heavy-metal', 'hardcore', 'punk-rock', 'grindcore', 'rock'],
         4: []
     }
     return genres[emoNum]
