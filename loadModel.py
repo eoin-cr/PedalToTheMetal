@@ -9,7 +9,7 @@ loaded_model = torch.load('trained_model.pth')
 
 loaded_model.eval()
 
-test_path = "TrainingData/HighPolling/Test2/"
+test_path = "TrainingData/HighPolling/Test3/"
 emotionsMap = {"happy": 0, "sad": 1, "chill": 2, "angry": 3, "invalid": 4}
 
 
@@ -39,8 +39,10 @@ for directory, subdirectories, files in os.walk(test_path):
             else:
                 test_data_array = np.vstack((test_data_array, input_data))
 
-
 print(test_data_array.shape)
+
+test_data_array = np.vstack((test_data_array, np.zeros((135,))))
+
 test_data_array = np.array(test_data_array, dtype="float32")
 print(type(test_data_array[0][0]))
 test_data_array = torch.Tensor(test_data_array)
@@ -58,5 +60,8 @@ for file in filesList:
 with torch.no_grad():
     predicted_outputs = loaded_model(test_data_array)
     _, predicted_labels = torch.max(predicted_outputs, 1)
+    predicted_labels = predicted_labels.tolist()
+    predicted_labels.pop(-1)
+
     print(predicted_labels)
     print(correct)
